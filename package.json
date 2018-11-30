@@ -1,6 +1,6 @@
 {
   "name": "mn_mongodb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Common method of mongodb from moonlight. ",
   "main": "Mongodb.js",
   "dependencies": {
@@ -14,5 +14,9 @@
     "mn_mongodb"
   ],
   "author": "moonlight",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@menghuiqiang999/mn_mongodb.git"
+  }
 }

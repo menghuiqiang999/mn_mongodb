@@ -18,35 +18,7 @@ class Mongodb {
             collectionName : options.collectionName
         };
     };
-    insertOne(document,callback){
-        const url = this.options.url;
-        const dbName = this.options.dbName;
-        const collectionName = this.options.collectionName;
-        new MongoClient.connect(url, newParser, (err, client) => {
-            if (err) {return params.callback(err)}
-            const db = client.db(dbName);
-            const col = db.collection(collectionName);
-            col.insertOne(document, (err, result) => {
-                if (err) {
-                    return callback(err)
-                }
-                const rt = result.result;
 
-                if (rt.ok == 1) {
-                    rt.errCode = ok.errCode;
-                    rt.errMsg = ok.errMsg;
-                    callback(null, rt);
-                }
-                else {
-                    rt.errCode = 1;
-                    rt.errMsg = "Insert failure  in insertOne of mn_Mongodb!";
-                    callback(null, rt);
-                }
-            });
-            client.close();
-        });
-
-    };
     /**
      *
      * @param document
@@ -82,6 +54,12 @@ class Mongodb {
             });
         });
     };
+    /**
+     *
+     * @param query
+     * @param options
+     * @param callback
+     */
     find(query,options,callback) {
         translateOptionsCallback(arguments,(params)=>{
             const url = this.options.url;
@@ -96,6 +74,12 @@ class Mongodb {
             });
         });
     };
+    /**
+     *
+     * @param query
+     * @param options
+     * @param callback
+     */
     findOne(query,options,callback) {
         translateOptionsCallback(arguments,(params)=> {
             const url = this.options.url;
@@ -110,38 +94,44 @@ class Mongodb {
             });
         });
     };
-    updateOne(filter,update,callback){
-            console.log("here1__________________");
+
+    findOneAndUpdate(filter,update,options,callback){
+        FourParamsTranslateOptionsCallback(arguments,(params)=> {
             const url = this.options.url;
             const dbName = this.options.dbName;
             const collectionName = this.options.collectionName;
             new MongoClient.connect(url, newParser, (err, client) => {
-                if (err) {return callback(err)}
+                if (err) {return params.callback(err)}
                 const db = client.db(dbName);
                 const col = db.collection(collectionName);
-                col.updateOne(filter, update, (err, result)=> {
+                col.findOneAndUpdate(filter, update, params.options, (err, result)=> {
                     if (err) {
-                        return callback(err)
+                        return params.callback(err)
                     }
-                    const rt = result.result;
+                    const rt = result;
                     if (rt.ok == 1) {
                         rt.errCode = ok.errCode;
                         rt.errMsg = ok.errMsg;
-                        callback(null, rt);
+                        params.callback(null, rt);
                     }
                     else {
-                        rt.errCode = 1;
+                        rt.errCode = 2;
                         rt.errMsg = "Update failure  in updateOne of mn_Mongodb!";
-                        callback(null, rt);
+                        params.callback(null, rt);
                     }
                 });
                 client.close();
             });
-
+        });
     };
-
+    /**
+     *
+     * @param filter
+     * @param update
+     * @param options
+     * @param callback
+     */
     updateOne(filter,update,options,callback){
-        console.log("here_________________2");
         FourParamsTranslateOptionsCallback(arguments,(params)=> {
             const url = this.options.url;
             const dbName = this.options.dbName;
@@ -161,7 +151,7 @@ class Mongodb {
                         params.callback(null, rt);
                     }
                     else {
-                        rt.errCode = 1;
+                        rt.errCode = 3;
                         rt.errMsg = "Update failure  in updateOne of mn_Mongodb!";
                         params.callback(null, rt);
                     }
