@@ -18,6 +18,20 @@ class Mongodb {
             collectionName : options.collectionName
         };
     };
+    aggregate(pipeline,options,callback) {
+        translateOptionsCallback(arguments,(params)=> {
+            const url = this.options.url;
+            const dbName = this.options.dbName;
+            const collectionName = this.options.collectionName;
+            new MongoClient.connect(url, newParser, (err, client) => {
+                if (err) {return params.callback(err)}
+                const db = client.db(dbName);
+                const col = db.collection(collectionName);
+                col.aggregate(pipeline,params.options, params.callback);
+                client.close();
+            });
+        });
+    };
 
     /**
      *

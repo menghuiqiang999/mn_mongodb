@@ -27,6 +27,23 @@ document 为要插入的文档，如下样例：
     const mongodb= new Mongodb();
 
     mongodb.setOptions(options);
+###Method aggregate
+
+    const _id="$userId";
+    const firstResumePeriod={$first:"$resumePeriod"};
+    const group={_id:_id,firstResumePeriod:firstResumePeriod};
+    const pipeline=[{$group:group}];
+    mongodb.aggregate(pipeline,(err,cursor) => {
+            assert.equal(err, null);
+            cursor.toArray(function(err, documents) {
+                console.log(documents);
+                callback(documents);
+            });
+    });
+options is option.
+cursor: user cursor just like above;
+Ref:.
+http://mongodb.github.io/node-mongodb-native/3.1/api/Collection.html#aggregate
 
 ###Method insertOne
     mongodb.insert(document,options,(err,result) => {
